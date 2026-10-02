@@ -9,7 +9,10 @@ def choose(pumps:list[Pump],hist:dict[str,Hist],required:float,max_kw:float):
     eligible=[]
     for p in pumps:
         h=hist[p.id]
-        if not h.running and h.since_start<p.min_rest:continue
+        # Minimum-downtime interlock is measured from the last STOP, not the
+        # last start: the scheduler cannot restart a pump before min_rest has
+        # elapsed since it stopped. Already-running pumps stay selectable.
+        if not h.running and h.since_stop<p.min_rest:continue
         eligible.append(p)
     best=None
     for mask in range(1<<len(eligible)):

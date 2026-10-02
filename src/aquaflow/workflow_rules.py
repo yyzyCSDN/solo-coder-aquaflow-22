@@ -65,7 +65,7 @@ def evaluate(name: str, p: dict[str, Any]) -> dict[str, Any]:
         return {"decision": "intervene" if result["low"] or result["high"] else "monitor", "value": result, "evidence": {"nodes": len(rows)}}
     if name == "pump_dispatch":
         rows = [Pump(str(x["id"]), float(x["kw"]), float(x["flow"]), float(x["min_run"]), float(x["min_rest"])) for x in p["pumps"]]
-        history = {str(k): Hist(bool(v["running"]), float(v["since_start"]), float(v["since_start"] if p.get("_rest_clock") == "since_start" else v["since_stop"])) for k, v in p["history"].items()}
+        history = {str(k): Hist(bool(v["running"]), float(v["since_start"]), float(v["since_stop"])) for k, v in p["history"].items()}
         chosen = choose_pumps(rows, history, float(p["required"]), float(p["max_kw"]))
         return {"decision": "dispatch", "value": chosen, "evidence": {"capacity": sum(x["flow"] for x in p["pumps"] if x["id"] in chosen)}}
     if name == "booster_failover":

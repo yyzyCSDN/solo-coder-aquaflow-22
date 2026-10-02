@@ -62,6 +62,5 @@ def normalize(name: str, payload: dict[str, Any], received_at: datetime | None =
         raise ValueError("missing workflow fields: " + ",".join(missing))
     normalized = _copy(payload)
     normalized["_contract"] = "v1"
-    if name == 'pump_dispatch': normalized["_rest_clock"] = "since_stop"; normalized["_contract"] = "legacy"
     normalized["_required"] = _REQUIRED[name]
     return WorkflowEnvelope(name, normalized, received_at or datetime.now().astimezone())
