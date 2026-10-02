@@ -9,7 +9,7 @@ def choose(pumps:list[Pump],hist:dict[str,Hist],required:float,max_kw:float):
     eligible=[]
     for p in pumps:
         h=hist[p.id]
-        if not h.running and h.since_start<p.min_rest:continue
+        if not h.running and h.since_stop<p.min_rest:continue
         eligible.append(p)
     best=None
     for mask in range(1<<len(eligible)):
